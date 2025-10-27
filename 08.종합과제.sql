@@ -160,7 +160,7 @@ GROUP BY (CASE
 -- 2) 가족이 1명이라도 있는 승객의 평균 생존율
 SELECT ROUND(AVG(survived) * 100, 2) 생존율
 FROM titanic
-WHERE sibsp + parch >= 1;
+WHERE sibsp >= 1  OR parch >= 1;
 
 -- 가족 규모(본인 포함 = 1 + sibsp + parch)별로 승객 수와 생존율을 조회하세요.
 -- - 가족 규모 순서로 정렬
