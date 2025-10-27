@@ -195,23 +195,24 @@ GROUP BY (CASE
 -- - 30-100달러 → '중고가(30-99)'
 -- - 100달러 이상 → '고가(100+)'
 -- - 요금 구간 순서로 정렬
-SELECT (
+SELECT
 	CASE
-		WHEN fare < 10 THEN '저가' 
-        WHEN fare BETWEEN 10 AND 29 THEN '중저가'
-        WHEN fare BETWEEN 30 AND 99 THEN '중고가'
-        ELSE '고가'
-	END) 요금분류,
-    ROUND(AVG(survived) * 100, 2) 생존율
+		WHEN fare < 10 THEN '저가'
+    WHEN fare < 30 THEN '중저가'
+    WHEN fare < 100 THEN '중고가'
+    ELSE '고가'
+  END AS 요금분류,
+  ROUND(AVG(survived) * 100, 2) 생존율
 FROM titanic
-GROUP BY (
-	CASE
-		WHEN fare < 10 THEN '저가' 
-        WHEN fare BETWEEN 10 AND 29 THEN '중저가'
-        WHEN fare BETWEEN 30 AND 99 THEN '중고가'
-        ELSE '고가'
-	END)
-ORDER BY 1;
+GROUP BY 요금분류
+ORDER BY
+	CASE 요금분류
+		WHEN '저가' THEN 1
+        WHEN '중저가' THEN 2
+        WHEN '중고가' THEN 3
+        ELSE 4
+    END;
+
 
 -- 등급별로 평균 요금을 계산하되, 평균 요금이 50달러를 초과하는 등급만 조회하세요.
 SELECT 
